@@ -13,9 +13,14 @@ public class FXBlasterBehaviour : MonoBehaviour
 
     private void OnParticleCollision(GameObject other)
     {
+        Debug.Log(other.name);
+
         if (other.CompareTag("Protection"))
         {
-
+            Debug.Log("touche");
+            var _modifier = _particlBlaster.collision;
+            _modifier.dampen = 0f;
+            _modifier.bounce = 1f;
         }
     }
 }
