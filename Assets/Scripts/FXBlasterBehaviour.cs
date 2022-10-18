@@ -11,16 +11,6 @@ public class FXBlasterBehaviour : MonoBehaviour
         _particlBlaster.Play();
     }
 
-    private void OnParticleCollision(GameObject other)
-    {
-        Debug.Log(other.name);
-
-        if (other.CompareTag("Protection"))
-        {
-            Debug.Log("touche");
-            var _modifier = _particlBlaster.collision;
-            _modifier.dampen = 0f;
-            _modifier.bounce = 1f;
-        }
-    }
+    //for each instantiate ennemy, event signal to saber for add List. For avoid
+    // use update 
 }
