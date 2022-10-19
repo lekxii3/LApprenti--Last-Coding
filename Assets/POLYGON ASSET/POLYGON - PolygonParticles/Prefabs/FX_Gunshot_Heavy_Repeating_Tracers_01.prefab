@@ -4967,7 +4967,6 @@ GameObject:
   - component: {fileID: 4325800379666594}
   - component: {fileID: 198251836467547974}
   - component: {fileID: 199090720937877538}
-  - component: {fileID: 3011743436450966305}
   m_Layer: 0
   m_Name: FX_Gunshot_Heavy_Repeating_Tracers_01
   m_TagString: Untagged
@@ -9680,18 +9679,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &3011743436450966305
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1416843826977054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be1d3d9397e260341bbe2afa2f0519ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1719491144535470
 GameObject:
   m_ObjectHideFlags: 0

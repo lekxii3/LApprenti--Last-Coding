@@ -1,18 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnvironnementBehaviour_V1 : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    LayerMask _BlasterLayerMask = 8;
+    public static event Action CollisionBlasterEnvironementSignal;
 
-    // Update is called once per frame
-    void Update()
+    private void OnParticleCollision(GameObject other)
     {
-        
+        if(other.layer == _BlasterLayerMask)
+        {    
+            CollisionBlasterEnvironementSignal?.Invoke();
+        }
     }
 }
