@@ -7,6 +7,8 @@ public class FXBlasterBehaviour_V1 : MonoBehaviour
     ParticleSystem _blasterParticle;
     ParticleSystem.Particle[] _arrayBlasterParticle;
     public List<Vector3> _positionBlaster=new List<Vector3>();
+    public delegate void PositionBlaster();
+    public static PositionBlaster positionBlasterSignal;
     
     private void Start()
     {
@@ -26,7 +28,7 @@ public class FXBlasterBehaviour_V1 : MonoBehaviour
     }
    
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         ReinitializeIfNeeded();        
     }
@@ -53,11 +55,7 @@ public class FXBlasterBehaviour_V1 : MonoBehaviour
 
         _blasterParticle.SetParticles(_arrayBlasterParticle, _numberBlasterParticleInArray);
 
-        Debug.Log(_positionBlaster.Count);
-        Debug.Log(_positionBlaster[0]);
-        Debug.Log(_positionBlaster[1]);
-        Debug.Log(_positionBlaster[2]);
-        Debug.Log(_positionBlaster[3]);
+        positionBlasterSignal?.Invoke();
     }
     void ReinitializeIfNeeded()
     {
