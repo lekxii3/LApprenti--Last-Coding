@@ -5,35 +5,33 @@ using UnityEngine;
 public class SaberBehaviour_V1 : MonoBehaviour
 {
     LayerMask _BlasterLayerMask = 8;
-    public delegate void CollisionBlasterSaber();
-    public static CollisionBlasterSaber CollisionBlasterSaberSignal;
-    FXBlasterBehaviour_V1 _BlasterBehaviourScriptAccess;
+    private ParticleCollisionEvent[] _collisionPos;
     [SerializeField] GameObject _saberPrefabs;
+    float _positionX;
+    float _positionY;
+    float _positionZ;
+    
+    float _rotationX;
+    float _rotationY;
 
-    private void OnEnable()
+    private void Update()
     {
-        FXBlasterBehaviour_V1.positionBlasterSignal += SaberRotate;
+        _rotationX = Mathf.Clamp(_rotationX, 0, 0);
+        _rotationY = Mathf.Clamp(_rotationY, 0, 0);
+        _saberPrefabs.transform.eulerAngles = new Vector3(_rotationX, _rotationY, 0);
     }
-    private void OnDisable()
-    {
-        FXBlasterBehaviour_V1.positionBlasterSignal -= SaberRotate;
-    }
-
     private void OnParticleCollision(GameObject other)
     {
         if (other.layer == _BlasterLayerMask)
         {
-            CollisionBlasterSaberSignal?.Invoke();           
+            var array = new ParticleCollisionEvent[other.GetComponent<ParticleSystem>().GetSafeCollisionEventSize()];
+            int count = other.GetComponent<ParticleSystem>().GetCollisionEvents(gameObject, array);
+            foreach(ParticleCollisionEvent item in array)
+            {
+                var _pos = item.intersection;
+
+            }
         }
     }
-    void SaberRotate()
-    {
-        _BlasterBehaviourScriptAccess = FindObjectOfType<FXBlasterBehaviour_V1>();
-        
-        foreach(Vector3 pos in _BlasterBehaviourScriptAccess._positionBlaster)
-        {
-            _saberPrefabs.transform.position = pos;
-        }
-        
-    }
+   
 }
