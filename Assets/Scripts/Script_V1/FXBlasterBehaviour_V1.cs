@@ -11,6 +11,7 @@ public class FXBlasterBehaviour_V1 : MonoBehaviour
     {
         _blasterParticle = transform.GetChild(0).GetComponent<ParticleSystem>();          
     }
+  
 
     private void OnEnable()
     {
@@ -51,4 +52,5 @@ public class FXBlasterBehaviour_V1 : MonoBehaviour
             _arrayBlasterParticle = new ParticleSystem.Particle[_blasterParticle.main.maxParticles];
         }
     }
+    
 }
