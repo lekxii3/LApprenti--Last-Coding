@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class SaberBehaviour_V1 : MonoBehaviour
 {
@@ -16,10 +17,9 @@ public class SaberBehaviour_V1 : MonoBehaviour
 
     private void Update()
     {
-        _rotationX = Mathf.Clamp(_rotationX, 0, 0);
-        _rotationY = Mathf.Clamp(_rotationY, 0, 0);
-        _saberPrefabs.transform.eulerAngles = new Vector3(_rotationX, _rotationY, 0);
+        Time.timeScale = 1f;
     }
+
     private void OnParticleCollision(GameObject other)
     {
         if (other.layer == _BlasterLayerMask)
@@ -29,8 +29,14 @@ public class SaberBehaviour_V1 : MonoBehaviour
             foreach(ParticleCollisionEvent item in array)
             {
                 var _pos = item.intersection;
+                Vector3 _targetpos = _pos - _saberPrefabs.transform.position;
+                float angle = Mathf.Atan2(_targetpos.y, _targetpos.x)*Mathf.Rad2Deg-90; 
 
+                Quaternion angleAxis = Quaternion.AngleAxis(angle, Vector3.forward);
+
+                _saberPrefabs.transform.rotation = Quaternion.Slerp(_saberPrefabs.transform.rotation, angleAxis, 0.1f); 
             }
+            
         }
     }
    
