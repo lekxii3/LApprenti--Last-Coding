@@ -7,19 +7,19 @@ public class SaberBehaviour_V1 : MonoBehaviour
 {
     LayerMask _BlasterLayerMask = 8;
     private ParticleCollisionEvent[] _collisionPos;
-    [SerializeField] GameObject _saberPrefabs;
+    [SerializeField] GameObject _saberPrefabsDefense;
     Vector3 _targetposBlasterValue;
     [SerializeField] bool _contactBlaster;
-    private Quaternion _LastParentRotation;
     void Start()
     {
-        _LastParentRotation = transform.parent.localRotation;
+         
     }
 
     private void Update()
-    {
-            FreeRotate();
+    {            
             SaberRotate();
+        
+        
     }
 
     private void OnParticleCollision(GameObject other)
@@ -29,33 +29,21 @@ public class SaberBehaviour_V1 : MonoBehaviour
             _contactBlaster = true;
             var array = new ParticleCollisionEvent[other.GetComponent<ParticleSystem>().GetSafeCollisionEventSize()];
             int count = other.GetComponent<ParticleSystem>().GetCollisionEvents(gameObject, array);
-            /*foreach(ParticleCollisionEvent item in array)
-            {
-                var _pos = item.intersection;
-                _targetposBlasterValue = _pos - _saberPrefabs.transform.position;                
-            }*/
+            
             for(int i = 0; i < array.Length; i++)
             {
                 var _pos = array[i].intersection;
-                _targetposBlasterValue = _pos - _saberPrefabs.transform.position;               
+                _targetposBlasterValue = _pos - _saberPrefabsDefense.transform.localPosition;               
             }
-
         }
         
     }   
 
     void SaberRotate()
-    {
-        float angle = Mathf.Atan2(_targetposBlasterValue.y, _targetposBlasterValue.x) * Mathf.Rad2Deg - 90;
+    {        
+        float angle = Mathf.Atan2(_targetposBlasterValue.y, _targetposBlasterValue.x) * Mathf.Rad2Deg-90;
         Quaternion angleAxis = Quaternion.AngleAxis(angle, Vector3.forward);
-        _saberPrefabs.transform.rotation = Quaternion.Slerp(_saberPrefabs.transform.rotation, angleAxis, 0.1f);
+        _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, angleAxis, 0.1f);
     }
-    void FreeRotate()
-    {
-        transform.localRotation = Quaternion.Inverse(transform.parent.localRotation) * _LastParentRotation * transform.localRotation;
-        _LastParentRotation = transform.parent.localRotation;
-    }
-    
-
-
+   
 }
