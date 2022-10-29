@@ -6,6 +6,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class testXRsimple : MonoBehaviour
 {
     public XRSimpleInteractable interactable;
+    public SaberBehaviour_V1 SaberBehaviourScript;
     MeshRenderer _meshRenderer;
     MeshRenderer _saberDefenseMeshRender;
     private Rigidbody _rb;
@@ -58,8 +59,13 @@ public class testXRsimple : MonoBehaviour
             saberDefense.transform.position = transform.position;
             saberDefense.transform.rotation = transform.rotation;
             saberCollider.transform.position = transform.position;
-            saberCollider.transform.rotation = transform.rotation;
-           
+
+            //RightHandTracker();
         }
+    }
+
+    void RightHandTracker()
+    {
+        saberDefense.transform.rotation = Quaternion.LookRotation(transform.forward,transform.up);
     }
 }
