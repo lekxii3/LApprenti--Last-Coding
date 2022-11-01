@@ -6,6 +6,7 @@ public class FXBlasterBehaviour_V1 : MonoBehaviour
 {
     ParticleSystem _blasterParticle;
     ParticleSystem.Particle[] _arrayBlasterParticle;
+    public Transform Player;
     
     private void Start()
     {
@@ -26,7 +27,8 @@ public class FXBlasterBehaviour_V1 : MonoBehaviour
 
     private void FixedUpdate()
     {
-        ReinitializeIfNeeded();        
+        ReinitializeIfNeeded();
+        transform.LookAt(Player);
     }
 
     void DestroyBlaster()

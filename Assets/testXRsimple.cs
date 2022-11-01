@@ -52,20 +52,20 @@ public class testXRsimple : MonoBehaviour
     {
         if (isUsing)
         {
-            //_meshRenderer.enabled = false;
-            //_saberDefenseMeshRender.enabled = true;
             transform.position = RightHandInteractor.transform.position;
             transform.rotation = RightHandInteractor.transform.rotation;
             saberDefense.transform.position = transform.position;
-            saberDefense.transform.rotation = transform.rotation;
+            //saberDefense.transform.rotation = transform.rotation;
             saberCollider.transform.position = transform.position;
-
-            //RightHandTracker();
+            saberCollider.transform.rotation = transform.rotation;
         }
-    }
-
-    void RightHandTracker()
-    {
-        saberDefense.transform.rotation = Quaternion.LookRotation(transform.forward,transform.up);
-    }
+        /*if(isUsing && SaberBehaviourScript._contactBlaster == true)
+        {
+            transform.position = RightHandInteractor.transform.position;
+            transform.rotation = RightHandInteractor.transform.rotation;
+            saberDefense.transform.position = transform.position;
+            saberCollider.transform.position = transform.position;
+            saberCollider.transform.rotation = transform.rotation;
+        }*/
+    }    
 }
