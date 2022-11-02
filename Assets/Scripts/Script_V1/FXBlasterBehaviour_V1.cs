@@ -31,7 +31,7 @@ public class FXBlasterBehaviour_V1 : MonoBehaviour
         transform.LookAt(Player);
     }
 
-    void DestroyBlaster()
+    void DestroyBlaster()                                                                               //This methods for setting end lifetime particle if collision other that saber
     {        
         int _numberBlasterParticleInArray = _blasterParticle.GetParticles(_arrayBlasterParticle);
 

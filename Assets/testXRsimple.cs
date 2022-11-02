@@ -7,10 +7,8 @@ public class testXRsimple : MonoBehaviour
 {
     public XRSimpleInteractable interactable;
     public SaberBehaviour_V1 SaberBehaviourScript;
-    MeshRenderer _meshRenderer;
-    MeshRenderer _saberDefenseMeshRender;
     private Rigidbody _rb;
-    private GameObject RightHandInteractor;
+    public GameObject RightHandInteractor;
     public GameObject saberDefense;
     public GameObject saberCollider;
     bool isUsing;
@@ -18,34 +16,33 @@ public class testXRsimple : MonoBehaviour
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        _meshRenderer = GetComponent<MeshRenderer>();
-        _saberDefenseMeshRender = GetComponent<MeshRenderer>();
     }
 
     private void OnEnable()
     {        
-        interactable.selectEntered.AddListener(TestGrabEnter);
-        interactable.selectExited.AddListener(TestGrabExit);
+        interactable.selectEntered.AddListener(GrabEnter);
+        interactable.selectExited.AddListener(GrabExit);
     }
     private void OnDisable()
     {        
-        interactable.selectEntered.RemoveListener(TestGrabEnter);
-        interactable.selectExited.RemoveListener(TestGrabExit);
+        interactable.selectEntered.RemoveListener(GrabEnter);
+        interactable.selectExited.RemoveListener(GrabExit);
     }
 
     
-    private void TestGrabEnter(SelectEnterEventArgs args)
+    private void GrabEnter(SelectEnterEventArgs args)
     {
         isUsing = true;
         _rb.useGravity = false;
         _rb.isKinematic = true;
         RightHandInteractor = args.interactorObject.transform.gameObject;
     }
-    private void TestGrabExit(SelectExitEventArgs args)
+    private void GrabExit(SelectExitEventArgs args)
     {
         isUsing = false;
         _rb.useGravity = true;
         _rb.isKinematic = false;
+
     }
 
     private void Update()
@@ -55,17 +52,16 @@ public class testXRsimple : MonoBehaviour
             transform.position = RightHandInteractor.transform.position;
             transform.rotation = RightHandInteractor.transform.rotation;
             saberDefense.transform.position = transform.position;
-            //saberDefense.transform.rotation = transform.rotation;
             saberCollider.transform.position = transform.position;
             saberCollider.transform.rotation = transform.rotation;
         }
-        /*if(isUsing && SaberBehaviourScript._contactBlaster == true)
+        if(isUsing==false)
         {
-            transform.position = RightHandInteractor.transform.position;
-            transform.rotation = RightHandInteractor.transform.rotation;
+            transform.position = transform.position;
+            transform.rotation = transform.rotation;
             saberDefense.transform.position = transform.position;
             saberCollider.transform.position = transform.position;
             saberCollider.transform.rotation = transform.rotation;
-        }*/
+        }
     }    
 }

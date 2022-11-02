@@ -13,17 +13,40 @@ public class SaberBehaviour_V1 : MonoBehaviour
     [SerializeField] GameObject _saberPrefabsDefense;
     Vector3 _targetposBlasterValue;
     public bool _contactBlaster;
-    [SerializeField] bool _endArray;
-    public Transform _empty;
-    
+    private bool _protectionActived;
+    private Collider _colliderProtection;
+    private float _timer;
+
+    private void Start()
+    {
+        _colliderProtection = GetComponent<Collider>();
+    }
+
+
+    private void OnEnable()
+    {
+        HandRightBehaviour_V1.PrimaryButtonProtectionActivate += ActivateProtection;
+        HandRightBehaviour_V1.PrimaryButtonProtectionDeactivate += DeactivateProtection;
+    }
+
+    private void OnDisable()
+    {
+        HandRightBehaviour_V1.PrimaryButtonProtectionActivate -= ActivateProtection;
+        HandRightBehaviour_V1.PrimaryButtonProtectionDeactivate -= DeactivateProtection;
+    }
 
     private void Update()
     {
-        
-            SaberRotate();
 
-            
-        
+        if (_protectionActived)
+        {
+            SaberRotate();
+        }
+        else
+        {
+            SaberReturnPose();
+
+        }
     }
 
     private void OnParticleCollision(GameObject other)
@@ -31,48 +54,67 @@ public class SaberBehaviour_V1 : MonoBehaviour
         if (other.layer == _BlasterLayerMask)
         {
             _contactBlaster = true;
-            //_saberPrefabsDefense.SetActive(true);
-            var array = new ParticleCollisionEvent[other.GetComponent<ParticleSystem>().GetSafeCollisionEventSize()];
-            int count = other.GetComponent<ParticleSystem>().GetCollisionEvents(gameObject, array);
+            var array = new ParticleCollisionEvent[other.GetComponent<ParticleSystem>().GetSafeCollisionEventSize()];       //create variable for create a new array for information case each event particle contact 
+            int count = other.GetComponent<ParticleSystem>().GetCollisionEvents(gameObject, array);                         //same index 
             
             for(int i = 0; i < array.Length; i++)
             {
                 var _pos = array[i].intersection;
 
-                //_empty.transform.position = array[i].intersection;
-                //_empty.transform.rotation = transform.rotation;
-
-                _targetposBlasterValue = _pos -  transform.position;
-
-                if (i <= array.Length)
-                {
-                    _endArray = true;
-                }
+                _targetposBlasterValue = _pos -  transform.position;                
             }
         }        
     }   
 
-    void SaberRotate()
+    void ActivateProtection()
     {
-        var angle = Mathf.Atan2(_targetposBlasterValue.y,_targetposBlasterValue.x)* Mathf.Rad2Deg-90;
-        Quaternion rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, angle);
-        _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, rotation, 0.1f);        
-
+        Debug.Log("Protection Activated");
+        _protectionActived = true;
     }
 
+    void DeactivateProtection()
+    {
+        Debug.Log("Protection Deactivated");
+        _protectionActived = false;
+    }
 
+    void SaberRotate()
+    {
+        _colliderProtection.enabled = true;
+        var angle = Mathf.Atan2(_targetposBlasterValue.y,_targetposBlasterValue.x)* Mathf.Rad2Deg-90;                               //calculate with X and Y for get angle but convert Radian to Degree with -90°
+        Quaternion rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, angle);          //Euler methode for rotate toward here target 
+        _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, rotation, 0.1f);        //Slerp for interpolate rotation
 
+        if (_contactBlaster)
+        {
+            _timer = Time.time;
+            Debug.Log(_timer);
+            if (_timer >= 2)
+            {
+                _timer = 0;
+                _contactBlaster = false;                
+                _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, testXRsimpleScriptAccess.transform.rotation, 0.2f);
+            }
+        }
+    }
+
+    void SaberReturnPose()
+    {
+        _colliderProtection.enabled = false;
+        _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, testXRsimpleScriptAccess.transform.rotation, 0.5f);        
+    }
 
     IEnumerator Delay()
     {        
         yield return new WaitForSeconds(1f);
         float _angleDeRetour = Mathf.Atan2(0,0)*Mathf.Rad2Deg;
-        Quaternion angleAxis = Quaternion.AngleAxis(_angleDeRetour, _empty.forward);
-        _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, angleAxis, 0.1f);
-        _contactBlaster = false;
-        _endArray = false;
+        //Quaternion angleAxis = Quaternion.AngleAxis(_angleDeRetour, _empty.forward);
+        //_saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, angleAxis, 0.1f);
+        _contactBlaster = false;       
         //_saberPrefabsDefense.SetActive(false);
     }
+
+
 
 
 
