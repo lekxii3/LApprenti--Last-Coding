@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.febucci.custom-hierarchy": "file:C:/Users/afris/Desktop/unitypackage-custom-hierarchy-main",
     "com.unity.collab-proxy": "1.17.2",
     "com.unity.feature.development": "1.0.1",
     "com.unity.ide.visualstudio": "2.0.16",

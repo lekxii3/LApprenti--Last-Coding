@@ -36,14 +36,10 @@ public class SaberBehaviour_V1 : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(_timer);
-        Debug.Log(_contactBlaster);
         if (_protectionActived)
         {
             SaberRotate();
-
             _timer += Time.deltaTime;
-            
         }
         else
         {
@@ -63,15 +59,10 @@ public class SaberBehaviour_V1 : MonoBehaviour
             int count = other.GetComponent<ParticleSystem>().GetCollisionEvents(gameObject, array);                         //same index 
             
             for(int i = 0; i < array.Length; i++)
-            {
+            {                        
                 var _pos = array[i].intersection;
 
                 _targetposBlasterValue = _pos -  transform.position;
-
-                if(i == array.Length - 1 && _timer > 0.8f)
-                {
-                    _contactBlaster = false;
-                }
             }
         }        
     }   
@@ -92,18 +83,16 @@ public class SaberBehaviour_V1 : MonoBehaviour
     {
         _colliderProtection.enabled = true;
 
-        if (_contactBlaster)
+        if (_contactBlaster && _timer < 0.15f) 
         {
             var angle = Mathf.Atan2(_targetposBlasterValue.y, _targetposBlasterValue.x) * Mathf.Rad2Deg - 90;                           //calculate with X and Y for get angle but convert Radian to Degree with -90°
             Quaternion rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, angle);          //Euler methode for rotate toward here target 
-            _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, rotation, 0.1f);        //Slerp for interpolate rotation
+            _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, rotation, 0.3f);        //Slerp for interpolate rotation
                       
         }
-
-        if (_contactBlaster==false && _timer > 1f)
-        {            
-            _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, GrabSaber_V1ScriptAccess.transform.rotation, 0.8f);
-            _timer = 0;
+        else if(_contactBlaster && _timer > 0.15f)
+        {
+            _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, GrabSaber_V1ScriptAccess.transform.rotation, 0.1f);
         }
     }
 
@@ -113,28 +102,6 @@ public class SaberBehaviour_V1 : MonoBehaviour
         _colliderProtection.enabled = false;
         _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, GrabSaber_V1ScriptAccess.transform.rotation, 0.5f);
     }
-
-    IEnumerator Delay()
-    {        
-        yield return new WaitForSeconds(1f);
-        float _angleDeRetour = Mathf.Atan2(0,0)*Mathf.Rad2Deg;
-        //Quaternion angleAxis = Quaternion.AngleAxis(_angleDeRetour, _empty.forward);
-        //_saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, angleAxis, 0.1f);
-        _contactBlaster = false;       
-        //_saberPrefabsDefense.SetActive(false);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

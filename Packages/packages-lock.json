@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.febucci.custom-hierarchy": {
+      "version": "file:C:/Users/afris/Desktop/unitypackage-custom-hierarchy-main",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.unity.collab-proxy": {
       "version": "1.17.2",
       "depth": 0,
