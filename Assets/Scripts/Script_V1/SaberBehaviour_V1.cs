@@ -36,21 +36,28 @@ public class SaberBehaviour_V1 : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(_timer);
+        Debug.Log(_contactBlaster);
         if (_protectionActived)
         {
-            SaberRotate();            
+            SaberRotate();
+
+            _timer += Time.deltaTime;
+            
         }
         else
         {
             SaberReturnPose();
-        }
-        TimerForReturnPoseDuringDefenseIfNoBlasterCollision();
+            _timer = 0;
+        }        
     }
 
     private void OnParticleCollision(GameObject other)
     {
+        
         if (other.layer == _BlasterLayerMask)
         {
+            _timer = 0;
             _contactBlaster = true;
             var array = new ParticleCollisionEvent[other.GetComponent<ParticleSystem>().GetSafeCollisionEventSize()];       //create variable for create a new array for information case each event particle contact 
             int count = other.GetComponent<ParticleSystem>().GetCollisionEvents(gameObject, array);                         //same index 
@@ -59,7 +66,12 @@ public class SaberBehaviour_V1 : MonoBehaviour
             {
                 var _pos = array[i].intersection;
 
-                _targetposBlasterValue = _pos -  transform.position;                
+                _targetposBlasterValue = _pos -  transform.position;
+
+                if(i == array.Length - 1 && _timer > 0.8f)
+                {
+                    _contactBlaster = false;
+                }
             }
         }        
     }   
@@ -79,26 +91,23 @@ public class SaberBehaviour_V1 : MonoBehaviour
     void SaberRotate()
     {
         _colliderProtection.enabled = true;
-        var angle = Mathf.Atan2(_targetposBlasterValue.y,_targetposBlasterValue.x)* Mathf.Rad2Deg-90;                               //calculate with X and Y for get angle but convert Radian to Degree with -90°
-        Quaternion rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, angle);          //Euler methode for rotate toward here target 
-        _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, rotation, 0.1f);        //Slerp for interpolate rotation
-    }
 
-    void TimerForReturnPoseDuringDefenseIfNoBlasterCollision()
-    {
         if (_contactBlaster)
         {
-            _timer = _timer+Time.deltaTime;
-            if (_timer >= 2)
-            {                
-                _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, GrabSaber_V1ScriptAccess.transform.rotation,0.8f);
-                _timer = 0; 
-                _contactBlaster = false;
-            }
-            
+            var angle = Mathf.Atan2(_targetposBlasterValue.y, _targetposBlasterValue.x) * Mathf.Rad2Deg - 90;                           //calculate with X and Y for get angle but convert Radian to Degree with -90°
+            Quaternion rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, angle);          //Euler methode for rotate toward here target 
+            _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, rotation, 0.1f);        //Slerp for interpolate rotation
+                      
+        }
+
+        if (_contactBlaster==false && _timer > 1f)
+        {            
+            _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, GrabSaber_V1ScriptAccess.transform.rotation, 0.8f);
+            _timer = 0;
         }
     }
 
+    
     void SaberReturnPose()
     {
         _colliderProtection.enabled = false;
