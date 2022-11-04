@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEditor.Progress;
 
 public class SaberBehaviour_V1 : MonoBehaviour
 {
-    public testXRsimple testXRsimpleScriptAccess;
+    public GrabSaber_V1 GrabSaber_V1ScriptAccess;
     LayerMask _BlasterLayerMask = 8;
     private ParticleCollisionEvent[] _collisionPos;
     [SerializeField] GameObject _saberPrefabsDefense;
@@ -37,16 +36,15 @@ public class SaberBehaviour_V1 : MonoBehaviour
 
     private void Update()
     {
-
         if (_protectionActived)
         {
-            SaberRotate();
+            SaberRotate();            
         }
         else
         {
             SaberReturnPose();
-
         }
+        TimerForReturnPoseDuringDefenseIfNoBlasterCollision();
     }
 
     private void OnParticleCollision(GameObject other)
@@ -84,24 +82,27 @@ public class SaberBehaviour_V1 : MonoBehaviour
         var angle = Mathf.Atan2(_targetposBlasterValue.y,_targetposBlasterValue.x)* Mathf.Rad2Deg-90;                               //calculate with X and Y for get angle but convert Radian to Degree with -90°
         Quaternion rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, angle);          //Euler methode for rotate toward here target 
         _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, rotation, 0.1f);        //Slerp for interpolate rotation
+    }
 
+    void TimerForReturnPoseDuringDefenseIfNoBlasterCollision()
+    {
         if (_contactBlaster)
         {
-            _timer = Time.time;
-            Debug.Log(_timer);
+            _timer = _timer+Time.deltaTime;
             if (_timer >= 2)
-            {
-                _timer = 0;
-                _contactBlaster = false;                
-                _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, testXRsimpleScriptAccess.transform.rotation, 0.2f);
+            {                
+                _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, GrabSaber_V1ScriptAccess.transform.rotation,0.8f);
+                _timer = 0; 
+                _contactBlaster = false;
             }
+            
         }
     }
 
     void SaberReturnPose()
     {
         _colliderProtection.enabled = false;
-        _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, testXRsimpleScriptAccess.transform.rotation, 0.5f);        
+        _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, GrabSaber_V1ScriptAccess.transform.rotation, 0.5f);
     }
 
     IEnumerator Delay()
