@@ -10,7 +10,7 @@ public class GrabSaber_V1 : MonoBehaviour
     public GameObject RightHandInteractor;
     public GameObject saberDefense;
     public GameObject saberCollider;
-    bool isUsing;
+    public bool isUsing;
 
     private void Start()
     {

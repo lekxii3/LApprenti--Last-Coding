@@ -6,11 +6,13 @@ using UnityEngine.UIElements;
 
 public class SaberBehaviour_V1 : MonoBehaviour
 {
+    public SaberArmed_V1 SaberArmed_V1AccessScript;
     public GrabSaber_V1 GrabSaber_V1ScriptAccess;
     LayerMask _BlasterLayerMask = 8;
     private ParticleCollisionEvent[] _collisionPos;
     [SerializeField] GameObject _saberPrefabsDefense;
     Vector3 _targetposBlasterValue;
+    public bool _usingSaber;
     public bool _contactBlaster;
     private bool _protectionActived;
     private Collider _colliderProtection;
@@ -36,16 +38,21 @@ public class SaberBehaviour_V1 : MonoBehaviour
 
     private void Update()
     {
-        if (_protectionActived)
+        if(GrabSaber_V1ScriptAccess.isUsing == true && SaberArmed_V1AccessScript.armedBool==true)
         {
-            SaberRotate();
-            _timer += Time.deltaTime;
-        }
-        else
-        {
-            SaberReturnPose();
-            _timer = 0;
-        }
+            _usingSaber = true;
+
+            if (_protectionActived)
+            {
+                SaberRotate();
+                _timer += Time.deltaTime;
+            }
+            else
+            {
+                SaberReturnPose();
+                _timer = 0;
+            }
+        }        
     }
 
     private void OnParticleCollision(GameObject other)
