@@ -45,7 +45,7 @@ public class SaberBehaviour_V1 : MonoBehaviour
         {
             SaberReturnPose();
             _timer = 0;
-        }        
+        }
     }
 
     private void OnParticleCollision(GameObject other)
@@ -95,7 +95,6 @@ public class SaberBehaviour_V1 : MonoBehaviour
             _saberPrefabsDefense.transform.rotation = Quaternion.Slerp(_saberPrefabsDefense.transform.rotation, GrabSaber_V1ScriptAccess.transform.rotation, 0.1f);
         }
     }
-
     
     void SaberReturnPose()
     {

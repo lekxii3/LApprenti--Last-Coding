@@ -61,6 +61,6 @@ public class GrabSaber_V1 : MonoBehaviour
             saberDefense.transform.position = transform.position;
             saberCollider.transform.position = transform.position;
             saberCollider.transform.rotation = transform.rotation;
-        }
+        }        
     }
 }

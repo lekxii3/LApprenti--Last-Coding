@@ -12,7 +12,7 @@ public class EnvironnementBehaviour_V1 : MonoBehaviour
     {
         if(other.layer == _BlasterLayerMask)
         {    
-            CollisionBlasterEnvironementSignal?.Invoke();
+            CollisionBlasterEnvironementSignal?.Invoke(); //Signal to FXBlasterBehaviour
         }
     }
 }
